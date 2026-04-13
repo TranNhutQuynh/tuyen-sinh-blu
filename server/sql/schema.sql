@@ -1,11 +1,26 @@
+CREATE DATABASE IF NOT EXISTS tuyensinh_baclieu
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
 USE tuyensinh_baclieu;
 
 CREATE TABLE IF NOT EXISTS admins (
   id INT PRIMARY KEY AUTO_INCREMENT,
   username VARCHAR(100) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(50) NOT NULL DEFAULT 'admin',
   full_name VARCHAR(255) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS registration_periods (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  period_name VARCHAR(255) NOT NULL,
+  start_at DATETIME NOT NULL,
+  end_at DATETIME NOT NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS candidates (
@@ -34,8 +49,13 @@ CREATE TABLE IF NOT EXISTS candidates (
   report_card_json JSON NULL,
   gdnl_json JSON NULL,
   vsat_json JSON NULL,
+  registration_period_id INT NULL,
+  registration_period_name VARCHAR(255) NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_candidates_registration_period
+    FOREIGN KEY (registration_period_id) REFERENCES registration_periods(id)
+    ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS candidate_preferences (
@@ -60,14 +80,10 @@ CREATE TABLE IF NOT EXISTS candidate_preferences (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_candidate_preferences_candidate
     FOREIGN KEY (candidate_id) REFERENCES candidates(id)
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
+  CONSTRAINT uq_candidate_preference_order
+    UNIQUE (candidate_id, priority_order)
 );
-ALTER TABLE admins
-ADD COLUMN role VARCHAR(50) NOT NULL DEFAULT 'admin';
-
-ALTER TABLE candidates
-ADD COLUMN registration_period_id INT NULL,
-ADD COLUMN registration_period_name VARCHAR(255) NULL;
 
 CREATE TABLE IF NOT EXISTS high_schools (
   id INT PRIMARY KEY AUTO_INCREMENT,
@@ -105,12 +121,5 @@ CREATE TABLE IF NOT EXISTS admission_methods (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS registration_periods (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  period_name VARCHAR(255) NOT NULL,
-  start_at DATETIME NOT NULL,
-  end_at DATETIME NOT NULL,
-  is_active TINYINT(1) NOT NULL DEFAULT 1,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+OltBSTrN0BxgesNr
+mysql -u '3tnG3MY2MctEwpr.root' -h gateway01.ap-southeast-1.prod.aws.tidbcloud.com -P 4000 --ssl-mode=VERIFY_IDENTITY --ssl-ca=D:\isrgrootx1.pem -p < schema.sql
