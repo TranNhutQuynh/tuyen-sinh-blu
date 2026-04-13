@@ -1,0 +1,59 @@
+body {
+  background: #f5f7fb;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.section-card {
+  border: 0;
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.table input,
+.table select,
+.table textarea {
+  min-width: 120px;
+}
+
+.sticky-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background: rgba(245, 247, 251, 0.95);
+  /* backdrop-filter: blur(8px); */
+  padding-top: 0.75rem;
+}
+
+.badge-soft {
+  background: #eef2ff;
+  color: #4338ca;
+  border-radius: 999px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+}
+
+.navbar-soft {
+  background: #0f172a;
+}
+
+.navbar-soft .navbar-brand,
+.navbar-soft .nav-link,
+.navbar-soft .navbar-text {
+  color: #ffffff !important;
+}
+
+.small-muted {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
