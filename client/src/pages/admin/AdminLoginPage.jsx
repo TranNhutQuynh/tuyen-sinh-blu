@@ -8,9 +8,6 @@ export default function AdminLoginPage() {
   const [form, setForm] = useState({ username: "", password: "" });
   const [submitting, setSubmitting] = useState(false);
 
-  const ADMIN_TOKEN_KEY = "admin_token";
-  const ADMIN_USER_KEY = "admin_user";
-
   const handleChange = (field, value) => {
     setForm((previous) => ({
       ...previous,
@@ -33,10 +30,10 @@ export default function AdminLoginPage() {
         return;
       }
 
-      sessionStorage.setItem(ADMIN_TOKEN_KEY, token);
+      sessionStorage.setItem("admin_token", token);
 
       if (admin) {
-        sessionStorage.setItem(ADMIN_USER_KEY, JSON.stringify(admin));
+        sessionStorage.setItem("admin_user", JSON.stringify(admin));
       }
 
       window.alert("Đăng nhập thành công");
@@ -51,14 +48,14 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="auth-shell py-5">
+    <div className="auth-shell py-4 py-md-5">
       <div className="container">
         <div className="d-flex justify-content-end mb-3">
           <ThemeToggle />
         </div>
 
         <div className="row justify-content-center align-items-center g-4">
-          <div className="col-lg-5">
+          <div className="col-12 col-md-10 col-lg-6">
             <div className="card section-card auth-card">
               <div className="card-body p-4 p-lg-5">
                 <span className="hero-chip mb-3 d-inline-flex">
@@ -81,6 +78,7 @@ export default function AdminLoginPage() {
                       onChange={(event) =>
                         handleChange("username", event.target.value)
                       }
+                      placeholder="Nhập tên đăng nhập"
                     />
                   </div>
 
@@ -93,6 +91,7 @@ export default function AdminLoginPage() {
                       onChange={(event) =>
                         handleChange("password", event.target.value)
                       }
+                      placeholder="Nhập mật khẩu"
                     />
                   </div>
 

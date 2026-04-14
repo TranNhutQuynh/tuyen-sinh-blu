@@ -81,11 +81,14 @@ function useYearStats(scores, reportCard) {
   const getFilledCount = useCallback(
     (year) => {
       let count = 0;
+
       REPORT_CARD_SUBJECTS.forEach((subject) => {
         const hk1 = scores?.[subject.code]?.[`${year}_HK1`] ?? "";
         const hk2 = scores?.[subject.code]?.[`${year}_HK2`] ?? "";
+
         if (hk1 !== "" && hk2 !== "") count++;
       });
+
       return count;
     },
     [scores]
@@ -96,9 +99,12 @@ function useYearStats(scores, reportCard) {
       const filled = getFilledCount(config.year);
       const hasAcademic = !!reportCard?.[config.academicField];
       const hasConduct = !!reportCard?.[config.conductField];
+
       if (filled === 0 && !hasAcademic && !hasConduct) return "empty";
-      if (filled === REPORT_CARD_SUBJECTS.length && hasAcademic && hasConduct)
+      if (filled === REPORT_CARD_SUBJECTS.length && hasAcademic && hasConduct) {
         return "done";
+      }
+
       return "partial";
     },
     [getFilledCount, reportCard]
@@ -107,13 +113,19 @@ function useYearStats(scores, reportCard) {
   const getMissing = useCallback(
     (config) => {
       const missing = [];
+
       REPORT_CARD_SUBJECTS.forEach((subject) => {
         const hk1 = scores?.[subject.code]?.[`${config.year}_HK1`] ?? "";
         const hk2 = scores?.[subject.code]?.[`${config.year}_HK2`] ?? "";
-        if (hk1 === "" || hk2 === "") missing.push(subject.label);
+
+        if (hk1 === "" || hk2 === "") {
+          missing.push(subject.label);
+        }
       });
+
       if (!reportCard?.[config.academicField]) missing.push("Học lực");
       if (!reportCard?.[config.conductField]) missing.push("Hạnh kiểm");
+
       return missing;
     },
     [scores, reportCard]
@@ -124,34 +136,41 @@ function useYearStats(scores, reportCard) {
 
 /* ─── Sub-components ─── */
 function SummaryBar({ configs, getStatus, getFilledCount }) {
-  let emptyCount = 0,
-    partialCount = 0,
-    doneCount = 0,
-    totalFilled = 0;
-  configs.forEach((c) => {
-    const st = getStatus(c);
-    if (st === "empty") emptyCount++;
-    else if (st === "partial") partialCount++;
+  let emptyCount = 0;
+  let partialCount = 0;
+  let doneCount = 0;
+  let totalFilled = 0;
+
+  configs.forEach((config) => {
+    const status = getStatus(config);
+
+    if (status === "empty") emptyCount++;
+    else if (status === "partial") partialCount++;
     else doneCount++;
-    totalFilled += getFilledCount(c.year);
+
+    totalFilled += getFilledCount(config.year);
   });
+
   const totalSubjects = REPORT_CARD_SUBJECTS.length * configs.length;
 
   return (
-    <div className="rc-summary-bar">
+    <div className="rc-summary-bar d-flex flex-wrap gap-2 align-items-center">
       <span className="rc-summary-seg">
         <span className="rc-seg-dot rc-seg-dot--empty" />
         {emptyCount} năm chưa nhập
       </span>
+
       <span className="rc-summary-seg">
         <span className="rc-seg-dot rc-seg-dot--partial" />
         {partialCount} năm nhập một phần
       </span>
+
       <span className="rc-summary-seg">
         <span className="rc-seg-dot rc-seg-dot--done" />
         {doneCount} năm hoàn tất
       </span>
-      <span className="rc-summary-total">
+
+      <span className="rc-summary-total ms-md-auto">
         {totalFilled} / {totalSubjects} môn đã nhập
       </span>
     </div>
@@ -161,6 +180,7 @@ function SummaryBar({ configs, getStatus, getFilledCount }) {
 function YearTab({ config, isActive, status, filledCount, onClick }) {
   const total = REPORT_CARD_SUBJECTS.length;
   const pct = status === "done" ? 100 : Math.round((filledCount / total) * 100);
+
   const badgeText =
     status === "done"
       ? "Hoàn tất"
@@ -183,6 +203,7 @@ function YearTab({ config, isActive, status, filledCount, onClick }) {
             {badgeText}
           </span>
         </div>
+
         <div className="rc-prog-bar">
           <div
             className={`rc-prog-fill rc-prog-fill--${status}`}
@@ -203,9 +224,11 @@ function AlertBanner({ status, missing, showMissing }) {
       </div>
     );
   }
+
   if (showMissing && missing.length > 0) {
     const shown = missing.slice(0, 5);
     const rest = missing.length - 5;
+
     return (
       <div className="rc-alert rc-alert--warn">
         <IconAlert />
@@ -217,6 +240,7 @@ function AlertBanner({ status, missing, showMissing }) {
       </div>
     );
   }
+
   return null;
 }
 
@@ -230,13 +254,14 @@ function ScoreRow({
 }) {
   const hk1Key = `${config.year}_HK1`;
   const hk2Key = `${config.year}_HK2`;
+
   const hk1Value = scores?.[subject.code]?.[hk1Key] ?? "";
   const hk2Value = scores?.[subject.code]?.[hk2Key] ?? "";
   const yearValue = calculateYearScore(hk1Value, hk2Value);
   const isForeignLanguage = subject.code === "NN";
 
   const yNum = parseFloat(yearValue);
-  const totalMod = !isNaN(yNum)
+  const totalMod = !Number.isNaN(yNum)
     ? yNum >= 8
       ? "great"
       : yNum >= 6.5
@@ -249,22 +274,25 @@ function ScoreRow({
   return (
     <tr>
       <td className="rc-td-subject">
-        <span className="rc-subject-label">{subject.label}</span>
-        {isForeignLanguage && (
-          <select
-            className="rc-lang-select"
-            value={scores?.[config.foreignLanguageField] ?? ""}
-            onChange={(e) =>
-              onFieldChange(config.foreignLanguageField, e.target.value)
-            }
-          >
-            {FOREIGN_LANGUAGE_OPTIONS.map((item) => (
-              <option key={item.value || "empty"} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        )}
+        <div className="rc-subject-wrap">
+          <span className="rc-subject-label">{subject.label}</span>
+
+          {isForeignLanguage ? (
+            <select
+              className="rc-lang-select"
+              value={scores?.[config.foreignLanguageField] ?? ""}
+              onChange={(event) =>
+                onFieldChange(config.foreignLanguageField, event.target.value)
+              }
+            >
+              {FOREIGN_LANGUAGE_OPTIONS.map((item) => (
+                <option key={item.value || "empty"} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          ) : null}
+        </div>
       </td>
 
       <td>
@@ -278,7 +306,9 @@ function ScoreRow({
           step="0.1"
           placeholder="—"
           value={hk1Value}
-          onChange={(e) => onScoreChange(subject.code, hk1Key, e.target.value)}
+          onChange={(event) =>
+            onScoreChange(subject.code, hk1Key, event.target.value)
+          }
         />
       </td>
 
@@ -293,7 +323,9 @@ function ScoreRow({
           step="0.1"
           placeholder="—"
           value={hk2Value}
-          onChange={(e) => onScoreChange(subject.code, hk2Key, e.target.value)}
+          onChange={(event) =>
+            onScoreChange(subject.code, hk2Key, event.target.value)
+          }
         />
       </td>
 
@@ -319,7 +351,6 @@ export default function ReportCardYearPanels({
   onFieldChange,
 }) {
   const [activeYear, setActiveYear] = useState("10");
-  // Track which tabs have been visited (to show missing highlights only after user leaves)
   const [touchedYears, setTouchedYears] = useState(new Set());
 
   const { getFilledCount, getStatus, getMissing } = useYearStats(
@@ -328,7 +359,6 @@ export default function ReportCardYearPanels({
   );
 
   const handleTabClick = (year) => {
-    // Mark current tab as touched before switching away
     setTouchedYears((prev) => new Set([...prev, activeYear]));
     setActiveYear(year);
   };
@@ -341,7 +371,7 @@ export default function ReportCardYearPanels({
         getFilledCount={getFilledCount}
       />
 
-      <div className="rc-tabs">
+      <div className="rc-tabs d-flex flex-wrap gap-2">
         {YEAR_CONFIGS.map((config) => (
           <YearTab
             key={config.year}
@@ -357,7 +387,6 @@ export default function ReportCardYearPanels({
       {YEAR_CONFIGS.map((config) => {
         const status = getStatus(config);
         const missing = getMissing(config);
-        // Show missing highlights only after user has visited and left this tab
         const showMissing = touchedYears.has(config.year) && status !== "done";
         const acMissing = showMissing && !reportCard?.[config.academicField];
         const cdMissing = showMissing && !reportCard?.[config.conductField];
@@ -368,8 +397,9 @@ export default function ReportCardYearPanels({
             className={`rc-panel${
               activeYear === config.year ? " rc-panel--active" : ""
             }`}
+            style={{ display: activeYear === config.year ? "block" : "none" }}
           >
-            <div className="rc-card">
+            <div className="rc-card overflow-hidden">
               <div className={`rc-band ${config.bandClass}`}>
                 <div className="rc-band-num">{config.year}</div>
                 <span className="rc-band-title">{config.title}</span>
@@ -383,8 +413,12 @@ export default function ReportCardYearPanels({
                   showMissing={showMissing}
                 />
 
-                <div className="rc-table-wrap">
-                  <table className="rc-table">
+                <div className="small-muted mb-3 d-block d-md-none">
+                  Vuốt ngang bảng để xem đầy đủ các cột.
+                </div>
+
+                <div className="rc-table-wrap table-responsive">
+                  <table className="rc-table table align-middle mb-0">
                     <thead>
                       <tr>
                         <th className="col-subject">Môn học</th>
@@ -393,6 +427,7 @@ export default function ReportCardYearPanels({
                         <th className="col-score">Cả năm</th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {REPORT_CARD_SUBJECTS.map((subject) => (
                         <ScoreRow
@@ -411,43 +446,67 @@ export default function ReportCardYearPanels({
 
                 <div className="rc-divider" />
 
-                <div className="rc-footer-grid">
-                  <div className="rc-field">
-                    <label className="rc-field-label">Học lực cả năm</label>
-                    <select
-                      className={`rc-select${
-                        acMissing ? " rc-select--missing" : ""
-                      }`}
-                      value={reportCard?.[config.academicField] ?? ""}
-                      onChange={(e) =>
-                        onFieldChange(config.academicField, e.target.value)
-                      }
-                    >
-                      {ACADEMIC_OPTIONS.map((item) => (
-                        <option key={item.value || "empty"} value={item.value}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </select>
+                <div className="row g-3 rc-footer-grid">
+                  <div className="col-12 col-md-6">
+                    <div className="rc-field">
+                      <label className="rc-field-label">Học lực cả năm</label>
+                      <select
+                        className={`rc-select${
+                          acMissing ? " rc-select--missing" : ""
+                        }`}
+                        value={reportCard?.[config.academicField] ?? ""}
+                        onChange={(event) =>
+                          onFieldChange(
+                            config.academicField,
+                            event.target.value
+                          )
+                        }
+                      >
+                        {ACADEMIC_OPTIONS.map((item) => (
+                          <option
+                            key={item.value || "empty"}
+                            value={item.value}
+                          >
+                            {item.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
 
-                  <div className="rc-field">
-                    <label className="rc-field-label">Hạnh kiểm cả năm</label>
-                    <select
-                      className={`rc-select${
-                        cdMissing ? " rc-select--missing" : ""
-                      }`}
-                      value={reportCard?.[config.conductField] ?? ""}
-                      onChange={(e) =>
-                        onFieldChange(config.conductField, e.target.value)
-                      }
-                    >
-                      {CONDUCT_OPTIONS.map((item) => (
-                        <option key={item.value || "empty"} value={item.value}>
-                          {item.label}
-                        </option>
-                      ))}
-                    </select>
+                  <div className="col-12 col-md-6">
+                    <div className="rc-field">
+                      <label className="rc-field-label">Hạnh kiểm cả năm</label>
+                      <select
+                        className={`rc-select${
+                          cdMissing ? " rc-select--missing" : ""
+                        }`}
+                        value={reportCard?.[config.conductField] ?? ""}
+                        onChange={(event) =>
+                          onFieldChange(config.conductField, event.target.value)
+                        }
+                      >
+                        {CONDUCT_OPTIONS.map((item) => (
+                          <option
+                            key={item.value || "empty"}
+                            value={item.value}
+                          >
+                            {item.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
+                  <div className="small-muted">
+                    Đang nhập dữ liệu cho <strong>{config.title}</strong>
+                  </div>
+
+                  <div className="small-muted">
+                    {getFilledCount(config.year)}/{REPORT_CARD_SUBJECTS.length}{" "}
+                    môn đã nhập đủ
                   </div>
                 </div>
               </div>

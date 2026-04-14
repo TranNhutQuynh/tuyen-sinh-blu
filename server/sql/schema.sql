@@ -121,5 +121,3 @@ CREATE TABLE IF NOT EXISTS admission_methods (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-OltBSTrN0BxgesNr
-mysql -u '3tnG3MY2MctEwpr.root' -h gateway01.ap-southeast-1.prod.aws.tidbcloud.com -P 4000 --ssl-mode=VERIFY_IDENTITY --ssl-ca=D:\isrgrootx1.pem -p < schema.sql

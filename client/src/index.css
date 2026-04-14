@@ -1481,3 +1481,333 @@ textarea.form-control {
 [data-theme="dark"] .table-responsive {
   background: var(--surface) !important;
 }
+/* =========================
+   RESPONSIVE CHUNG
+========================= */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+  min-width: 720px;
+}
+
+.section-card {
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.section-card .card-body {
+  padding: 24px;
+}
+
+.btn-action,
+.btn,
+button {
+  border-radius: 14px;
+}
+
+.form-control,
+.form-select {
+  min-height: 48px;
+  border-radius: 14px;
+  font-size: 16px;
+}
+
+textarea.form-control {
+  min-height: 110px;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.small-muted {
+  opacity: 0.84;
+  line-height: 1.6;
+}
+
+.hero-chip {
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================
+   FORM THÍ SINH
+========================= */
+.application-shell,
+.public-page,
+.public-layout {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.application-form .card,
+.section-card {
+  margin-bottom: 20px;
+}
+
+.application-form .table td,
+.application-form .table th {
+  vertical-align: middle;
+}
+
+.application-form .table input,
+.application-form .table select {
+  min-width: 120px;
+}
+
+.sticky-submit-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  padding: 14px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================
+   HỌC BẠ 3 KHỐI
+========================= */
+.report-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.report-card-panel {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+.report-card-panel .panel-header {
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.report-card-panel .panel-body {
+  padding: 18px;
+}
+
+.report-card-panel .table-responsive table {
+  min-width: 520px;
+}
+
+.report-card-panel .subject-cell {
+  min-width: 180px;
+}
+
+.report-card-panel .score-input {
+  min-width: 88px;
+  text-align: center;
+}
+
+/* =========================
+   ADMIN
+========================= */
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.admin-top-actions,
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.admin-toolbar .btn,
+.admin-top-actions .btn {
+  white-space: nowrap;
+}
+
+.table-themed th,
+.table-themed td {
+  vertical-align: middle;
+}
+
+.table-themed input.form-control,
+.table-themed select.form-select {
+  min-width: 140px;
+}
+
+.auth-shell .auth-card {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 992px) {
+  .section-card .card-body {
+    padding: 20px;
+  }
+
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-card-panel .table-responsive table {
+    min-width: 640px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+
+  .section-card {
+    border-radius: 18px;
+  }
+
+  .section-card .card-body {
+    padding: 16px;
+  }
+
+  .h1,
+  h1 {
+    font-size: 28px !important;
+    line-height: 1.25;
+  }
+
+  .h2,
+  h2 {
+    font-size: 22px !important;
+    line-height: 1.3;
+  }
+
+  .h3,
+  h3 {
+    font-size: 20px !important;
+  }
+
+  .hero-chip {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .form-control,
+  .form-select {
+    min-height: 44px;
+    font-size: 15px;
+  }
+
+  .btn,
+  .btn-action {
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+
+  .sticky-submit-bar {
+    padding: 12px 14px;
+  }
+
+  .sticky-submit-bar .btn {
+    width: 100%;
+  }
+
+  .table-responsive table {
+    min-width: 640px;
+  }
+
+  .table-themed input.form-control,
+  .table-themed select.form-select {
+    min-width: 120px;
+  }
+
+  .admin-top-actions,
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-top-actions .btn,
+  .admin-toolbar .btn {
+    width: 100%;
+  }
+
+  .auth-shell {
+    padding: 16px 0;
+  }
+
+  .auth-shell .auth-card .card-body {
+    padding: 20px 16px !important;
+  }
+}
+
+/* =========================
+   MOBILE NHỎ
+========================= */
+@media (max-width: 576px) {
+  .container,
+  .container-fluid {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .section-card {
+    border-radius: 16px;
+  }
+
+  .section-card .card-body {
+    padding: 14px;
+  }
+
+  .h1,
+  h1 {
+    font-size: 24px !important;
+  }
+
+  .h2,
+  h2 {
+    font-size: 20px !important;
+  }
+
+  .small-muted {
+    font-size: 14px;
+  }
+
+  .table-responsive table {
+    min-width: 600px;
+  }
+
+  .report-card-panel .panel-header {
+    padding: 14px 16px;
+    font-size: 17px;
+  }
+
+  .report-card-panel .panel-body {
+    padding: 14px;
+  }
+
+  .report-card-panel .table-responsive table {
+    min-width: 560px;
+  }
+}

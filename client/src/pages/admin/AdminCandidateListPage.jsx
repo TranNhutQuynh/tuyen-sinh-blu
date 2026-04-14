@@ -44,18 +44,13 @@ export default function AdminCandidateListPage() {
       return items;
     }
 
-    return items.filter((item) => {
-      return [
-        item.applicationCode,
-        item.fullName,
-        item.nationalId,
-        item.examNumber,
-      ]
+    return items.filter((item) =>
+      [item.applicationCode, item.fullName, item.nationalId, item.examNumber]
         .filter(Boolean)
         .some((value) =>
           String(value).toLowerCase().includes(normalizedKeyword)
-        );
-    });
+        )
+    );
   }, [items, keyword]);
 
   const handleDelete = async (item) => {
@@ -86,10 +81,11 @@ export default function AdminCandidateListPage() {
               </div>
             </div>
 
-            <div className="d-flex gap-2 flex-wrap">
+            <div className="admin-toolbar">
               <Link className="btn btn-outline-secondary" to="/admin/dashboard">
                 ← Quay lại
               </Link>
+
               <button className="btn btn-outline-secondary" onClick={loadData}>
                 Làm mới
               </button>
@@ -97,7 +93,7 @@ export default function AdminCandidateListPage() {
           </div>
 
           <div className="row g-3 align-items-end">
-            <div className="col-md-6">
+            <div className="col-12 col-lg-6">
               <label className="form-label">
                 Tìm theo mã hồ sơ / họ tên / CCCD / SBD
               </label>
@@ -109,8 +105,8 @@ export default function AdminCandidateListPage() {
               />
             </div>
 
-            <div className="col-md-6">
-              <div className="d-flex flex-wrap gap-2 justify-content-md-end">
+            <div className="col-12 col-lg-6">
+              <div className="admin-toolbar justify-content-lg-end">
                 {exportTypes.map((item) => (
                   <a
                     key={item.key}
@@ -134,8 +130,8 @@ export default function AdminCandidateListPage() {
             <div>Đang tải dữ liệu...</div>
           ) : (
             <div className="table-responsive">
-              <table className="table table-hover align-middle">
-                <thead className="table-light">
+              <table className="table table-hover align-middle table-themed">
+                <thead className="table-head-soft">
                   <tr>
                     <th>Mã hồ sơ</th>
                     <th>Họ tên</th>
@@ -147,6 +143,7 @@ export default function AdminCandidateListPage() {
                     <th style={{ minWidth: 260 }}>Thao tác</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {filteredItems.map((item) => (
                     <tr key={item.id}>

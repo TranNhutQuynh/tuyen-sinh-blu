@@ -146,17 +146,13 @@ export default function AdminRegistrationPeriodPage() {
   };
 
   const handleDelete = async (item) => {
-    if (!item.id) {
-      return;
-    }
+    if (!item.id) return;
 
     const confirmed = window.confirm(
       `Bạn có chắc muốn xóa "${item.period_name}" không?`
     );
 
-    if (!confirmed) {
-      return;
-    }
+    if (!confirmed) return;
 
     try {
       await deleteRegistrationPeriod(item.id);
@@ -184,9 +180,11 @@ export default function AdminRegistrationPeriodPage() {
             </div>
           </div>
 
-          <Link className="btn btn-outline-secondary" to="/admin/dashboard">
-            ← Quay lại
-          </Link>
+          <div className="admin-toolbar">
+            <Link className="btn btn-outline-secondary" to="/admin/dashboard">
+              ← Quay lại
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -194,6 +192,7 @@ export default function AdminRegistrationPeriodPage() {
         <div className="card-body">
           <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <h2 className="h5 mb-0">Danh sách đợt đăng ký</h2>
+
             <button
               type="button"
               className="btn btn-outline-primary"
@@ -214,6 +213,7 @@ export default function AdminRegistrationPeriodPage() {
                   <th style={{ width: 220 }}>Thao tác</th>
                 </tr>
               </thead>
+
               <tbody>
                 {periods.map((item, index) => (
                   <tr key={item.id || `new-period-${index}`}>
